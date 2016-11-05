@@ -1,136 +1,65 @@
-$restaurants={
-  "Salty Sow"=>{
-    :price=> 29,
-    :waittime=> 61,
-    :quality=> 94},
-  "Fabi + Rosi"=>{
-    :price=> 21,
-    :waittime=> 61,
-    :quality=> 80},
-  "McDonald's"=>{
-    :price=>86,
-    :waittime=>92,
-    :quality=>10},
-  "Franklin's"=>{
-    :price=> 39,
-    :waittime=>1,
-    :quality=>100}, 
-  "Hopdoddy"=>{
-    :price=> 54,
-    :waittime=>37,
-    :quality=>95},
-  "Chilantro"=>{
-    :price=> 73,
-    :waittime=>61,
-    :quality=>80},
-  "Torchy's Tacos"=>{
-    :price=> 67,
-    :waittime=>85,
-    :quality=>80},
-  "Uchi"=>{
-    :price=> 3,
-    :waittime=>61,
-    :quality=>100},
-  "Chez Zee"=>{
-    :price=> 33,
-    :waittime=>92,
-    :quality=>85},
-  "Wahoo's Fish Tacos"=>{
-    :price=> 69,
-    :waittime=>92,
-    :quality=>50},
-  "Honey Ham"=>{
-    :price=> 73,
-    :waittime=>92,
-    :quality=>50},
-  "Juan in a Million"=>{
-    :price=> 66,
-    :waittime=>80,
-    :quality=>65},
-    "Raising Cane's"=>{
-    :price=> 78,
-    :waittime=>92,
-    :quality=>60}
+$podcasts=[
+   {
+    :name =>"Patient Zero",
+    :tags => ["colonialism", "health"],
+    :description => "This podcast includes stories about...",
+    :link => "http://www.radiolab.org/story/patient-zero-updated/",
+    :podcast =>"Radiolab",
+    :subject => ["geography", "usgovernment"],
+    :image => "images/radiolab.jpeg"},
+  {
+    :name => "Mau Mau",
+    :tags => ["colonialism", "england"],
+    :description => "This podcast includes stories about...",
+    :link => "http://www.radiolab.org/story/mau-mau/",
+    :podcast =>"Radiolab",
+    :subject => ["geography", "usgovernment"],
+    :image => "images/radiolab.jpeg"
+    },
+  {
+    :name => "Public Works: Rethinking America's Transportation Infrastructure",
+    :tags => ["federalism", "congress", "pork-barrel spending", "pork barrel spending", "congressional elections", "budget priorities", "federal grants"],
+    :description => "Focusing on roads as an example, the episode explores the reasons decisions about infrastructure are made the way they are. Also discusses Constitutional role of national vs. state governments wrt inrfrastructure and changes in public infrastructure over time.",
+    :link => "http://99percentinvisible.org/episode/public-works-rethinking-americas-transportation-infrastructure/",
+    :podcast =>"99 Percent Invisible",
+    :subject => ["geography", "usgovernment"],
+    :image => "images/99percent.jpg"
+    },
+    {
+    :name => "Making Up Ground",
+    :tags => ["land reclamation", "archeology", "westward expansion", "san francisco", "california gold rush"],
+    :description => "Explores examples of several cities in different parts of the world, begiinning with the City of San Francisco, that have created their own land out of the sea. Interesting descritpion of archeological digs in SF in recent decades that uncovered entire ships that were buried under other debris and fill to extend the shore. Includes historical and modern examples.",
+    :link => "http://99percentinvisible.org/episode/making-up-ground/",
+    :podcast =>"99 Percent Invisible",
+    :subject => ["geography", "ushistory"],
+    :image => "images/99percent.jpg"
     }
-def get_rating(first,second, third)
-  if first=="quality"
-    a=1.0
-    if second=="price"
-      b=0.6667
-      if third=="waittime"
-        c=0.3333
-      else
-        c=0
+    ]
+$pod_list=[]
+def get_tags(tags_list)
+  tags_list.each do |tag|
+    $podcasts.each do |pod|
+      if pod[:tags].include?(tag)
+        if $pod_list.include?(pod)==false
+          $pod_list.push(pod)
+        end
       end
-    elsif second=="waittime"
-      c=0.6667
-      if third=="price"
-        b=0.3333
-      else
-        b=0
-      end
-    else
-      c=0
-      b=0
     end
-  elsif first=="price"
-    b=1.0
-    if second=="waittime"
-      c=0.6667
-      if third=="quality"
-        a=0.3333
-      else
-        a=0
-      end
-    elsif second=="quality"
-      a=0.6667
-      if third=="waittime"
-        c=0.3333
-      else
-        c=0
-      end
-    else
-      a=0
-      c=0
-    end
-  elsif first=="waittime"
-    c=1.0
-    if second =="quality"
-      a=0.6667
-      if third=="price"
-        b=0.3333
-      else
-        b=0
-      end
-    elsif second=="price"
-      b=0.6667
-      if third=="quality"
-        a=0.3333
-      else
-        a=0
-      end
-    else
-      b=0
-      a=0
-    end
-  else
-    a=1.0
-    b=1.0
-    c=1.0
   end
-  popular={}
-  scores={}
-  $restaurants.each do |restaurant, values_hash|
-    p=values_hash[:price]
-    q=values_hash[:quality]
-    w=values_hash[:waittime]
-    scores["#{restaurant}: &nbsp;&nbsp;"]="#{
-      #((a*q*b*p*c*w)**(1/(a+b+c)))
-      ((2*a*q+b*p+c*w)/(2*a+b+c)).round(2)} <br><br>"
-  end
-while scores.length>5
-  scores=scores.sort_by{|key,value| value.to_i}.reverse.to_a
-  scores.pop
 end
-return scores
+def get_subjects(subject)
+  $podcasts.each do |pod|
+      if pod[:subject].include?(subject)
+        if $pod_list.include?(pod)==false
+          $pod_list.push(pod)
+        end
+      end
+    end
 end
+
+def get_pods(tags, sub)
+  get_tags(tags)
+  get_subjects(sub)
+  $pod_list
+end
+
